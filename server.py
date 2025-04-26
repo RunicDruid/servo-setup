@@ -6,10 +6,6 @@ import motor
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def start():
-    return render_template('index.html')
-
 @app.route('/servo/', methods=['GET'])
 def move():
     if request.method == 'GET':
