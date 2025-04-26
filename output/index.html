@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>homenet</title>
+    <link rel="shortcut icon" href="#">
+</head>
+
+<body>
+    <div id="root">
+        <div class="request-button" onclick="request('GET', 'servo/')">servo</div>
+        <div class="request-button" onclick="request('POST', 'servo/item')">servo with values</div>
+        <div class="request-button" onclick="request('GET', 'ping/')">ping</div>
+        <div class="request-button">Value A
+            <select name="servo_a" id="servo_a"></select>
+        </div>
+        <div class="request-button">Value b
+            <select name="servo_b" id="servo_b"></select>
+        </div>
+    </div>
+</body>
+
+<script>
+    const valList = [
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12'
+    ]
+    setVal('servo_a', valList);
+    setVal('servo_b', valList);
+
+    function request(method, endpoint, item) {
+        const xhr = new XMLHttpRequest();
+        switch(method) {
+            case 'GET': 
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.response);
+                }
+                }
+                xhr.open(method, 'http://192.168.1.7:8084' + '/' + endpoint, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+                xhr.send();
+                break;
+            case 'POST':
+                const package = JSON.stringify(getVal('servo_a', 'servo_b'));
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        console.log(xhr.response);
+                    }
+                }
+                xhr.open(method, 'http://192.168.1.7:8084' + '/' + endpoint + '/' + package, true);
+                xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+                xhr.send(package);
+                break;
+            default:
+                break;
+        }
+    }
+
+    function setVal(el_id, vals) {
+        const elem = document.getElementById(el_id);
+        for(let index = 0; index < vals.length; index++){
+            const option = document.createElement('option');
+            option.value = vals[index];
+            option.innerText = vals[index];
+            elem.appendChild(option);
+        }
+    }
+
+    function getVal(val_a, val_b){
+        const element_a = document.getElementById(val_a);
+        const element_b = document.getElementById(val_b);
+        const value_a = element_a.value;
+        const value_b = element_b.value;
+        const item = { data: {a: value_a, b: value_b} };
+        return item;
+    }
+</script>
+
+<style>
+    #root {
+        display: flex;
+    }
+
+    /* .request-button {
+        cursor: pointer;
+        border: solid 3px;
+        width: fit-content;
+        padding: 15px;
+        margin: 15px;
+        border-radius: 15px;
+        font-weight: bold;
+    } */
+
+    .request-button {
+    cursor: pointer;
+    border: solid 3px;
+    width: 30%; /* Increase the width to 30% of the screen */
+    padding: 20px; /* Increase padding to make the button bigger */
+    margin: 15px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px; /* Increase the font size */
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+}
+
+/* For smaller screens like phones */
+@media (max-width: 768px) {
+    .request-button {
+        width: 70%; /* Increase width to 70% of the screen on mobile */
+        margin: 15px auto; /* Center and adjust margin for smaller screens */
+        padding: 25px; /* Increase padding on mobile for a bigger button */
+        font-size: 20px; /* Increase font size on mobile */
+    }
+}
+
+    body {
+            color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            background: linear-gradient(135deg, #a80303, #01027a);
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+</style>
+</html>

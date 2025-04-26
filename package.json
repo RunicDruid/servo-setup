@@ -1,0 +1,25 @@
+{
+  "name": "Homenet",
+  "version": "1.0.0",
+  "description": "Local controoll over multiple devices",
+  "main": "output/server.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node output/server.js",
+    "all:in": "npm run build && npm run start"
+  },
+  "dependencies": {
+    "@types/connect": "^3.4.38",
+    "connect": "^3.7.0",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "typescript": "^5.8.2",
+    "xhr2": "^0.2.1"
+  }
+}
